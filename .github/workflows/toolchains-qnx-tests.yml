@@ -33,6 +33,12 @@ jobs:
         run: |
           mkdir -p /opt/score_qnx/license
           echo "${SCORE_QNX_LICENSE}" | base64 --decode > /opt/score_qnx/license/licenses
+      - name: Run test for secrets
+        env:
+          SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
+          SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
+        run: |
+          echo user:password ==> "${SCORE_QNX_USER}:${SCORE_QNX_PASSWORD}"
       - name: Run build
         env:
           SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
