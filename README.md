@@ -65,3 +65,5 @@ common --credential_helper=*.qnx.com=%worksapce%/path/to/qnx_credential_helper.p
 ```
 
 The credentials are taken from .netrc or from enviroment variables ```SCORE_QNX_USER``` and ```SCORE_QNX_PASSWORD```.
+
+> THIS IS JUST A COMMENT TO TEST MERGE QUEUE
