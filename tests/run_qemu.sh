@@ -28,8 +28,8 @@ qemu-system-x86_64 \
                 -kernel "${IFS_IMAGE}" \
                 -serial mon:stdio \
                 -object rng-random,filename=/dev/urandom,id=rng0 \
-                -device virtio-rng-pci,rng=rng0 &
+                -device virtio-rng-pci,rng=rng0
 
-sleep 5
-
-kill $(cat /tmp/qemu.pid)
+#sleep 5
+#
+#kill $(cat /tmp/qemu.pid)
