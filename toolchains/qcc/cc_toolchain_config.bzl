@@ -398,10 +398,13 @@ def _impl(ctx):
                     ACTION_NAMES.cpp_header_parsing,
                     ACTION_NAMES.clif_match,
                 ],
-                flag_groups = [flag_group(flags = [
-                    "-Wc,-MD,%{dependency_file}",
-                    "-Wp,-MD,%{dependency_file}",
-                ])],
+                flag_groups = [flag_group(
+                    flags = [
+                        "-Wc,-MD,%{dependency_file}",
+                        "-Wp,-MD,%{dependency_file}",
+                    ],
+                    expand_if_available = "dependency_file",
+                )],
                 with_features = [
                     with_feature_set(not_features = ["dependency_file_named_implicitly"]),
                 ],
