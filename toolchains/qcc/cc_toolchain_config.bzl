@@ -433,6 +433,10 @@ def _impl(ctx):
         ],
     )
 
+    base_path = "/proc/self/cwd/"
+    if ctx.attr.workspace_root_hint:
+        base_path = ctx.attr.workspace_root_hint
+
     sdp_env_feature = feature(
         name = "sdp_env",
         enabled = True,
@@ -440,8 +444,9 @@ def _impl(ctx):
             env_set(
                 actions = all_compile_actions + all_link_actions,
                 env_entries = [
-                    env_entry(key = "QNX_HOST", value = "/proc/self/cwd/" + ctx.file.qnx_host.path),
-                    env_entry(key = "QNX_TARGET", value = "/proc/self/cwd/" + ctx.file.qnx_target.path),
+
+                    env_entry(key = "QNX_HOST", value = base_path + ctx.file.qnx_host.path),
+                    env_entry(key = "QNX_TARGET", value = base_path + ctx.file.qnx_target.path),
                     env_entry(key = "QNX_CONFIGURATION_EXCLUSIVE", value = "/var/tmp/.qnx"),
                     env_entry(key = "QNX_SHARED_LICENSE_FILE", value = "/opt/score_qnx/license/licenses"),
                 ],
@@ -468,7 +473,7 @@ def _impl(ctx):
     ]
 
     cxx_builtin_include_directories = [
-        "/proc/self/cwd/{}".format(include_directory.path)
+        "{}{}".format(base_path, include_directory.path)
         for include_directory in ctx.files.cxx_builtin_include_directories
     ]
 
@@ -503,5 +508,7 @@ cc_toolchain_config = rule(
         "qcc_version": attr.string(default = "12.2.0"),
         "gcc_variant": attr.string(mandatory = True),
         "gcc_variant_cxx": attr.string(mandatory = True),
+        "workspace_root_hint": attr.string(),
+
     },
 )

@@ -93,6 +93,7 @@ cc_toolchain_config(
     qcc_version = "12.2.0",
     gcc_variant = "gcc_ntoaarch64le",
     gcc_variant_cxx = "gcc_ntoaarch64le_cxx",
+    workspace_root_hint = "%{build_workspace_root}",
   
 )
 
