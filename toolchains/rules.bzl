@@ -11,11 +11,14 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 def _qcc_toolchain_impl(rctx):
+    sandbox_dir = rctx.workspace_root.realpath.get_child("bazel-out").realpath.get_child("..").realpath
+
     rctx.template(
         "BUILD",
         rctx.attr._cc_tolchain_build,
         {
             "%{toolchain_sdp}": rctx.attr.sdp_repo,
+            "%{build_workspace_root}": str(sandbox_dir) + "/",
         },
     )
 
