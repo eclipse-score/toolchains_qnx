@@ -66,6 +66,10 @@ def _impl(ctx):
     qcc_version = ctx.attr.qcc_version  # e.g. "gcc_ntox86_64" or "gcc_ntoaarch64le"
     gcc_variant_cxx = ctx.attr.gcc_variant_cxx
 
+    mismatched_new_delete_flag = []
+    if qcc_version.startswith("12."):
+        mismatched_new_delete_flag = ["-Wno-error=mismatched-new-delete"]
+
     assemble_action = action_config(
         action_name = ACTION_NAMES.assemble,
         tools = [tool(tool = ctx.executable.cc_binary)],
@@ -274,8 +278,7 @@ def _impl(ctx):
                         flags = [
                             "-Wall",
                             "-Wno-error=deprecated-declarations",
-                            "-Wno-error=mismatched-new-delete",  # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=103993
-                        ],
+                        ] + mismatched_new_delete_flag,  # only supported on newer qcc
                     ),
                 ],
                 with_features = [
@@ -433,18 +436,32 @@ def _impl(ctx):
         ],
     )
 
+    # License server setup: prefer user/env, else fall back to SDP-provided default.
+    qnxlm_license_file = ctx.configuration.default_shell_env.get("QNXLM_LICENSE_FILE", "") or ctx.attr.default_license_server
+    lm_license_file = ctx.configuration.default_shell_env.get("LM_LICENSE_FILE", "") or qnxlm_license_file
+
     sdp_env_feature = feature(
         name = "sdp_env",
         enabled = True,
         env_sets = [
             env_set(
                 actions = all_compile_actions + all_link_actions,
-                env_entries = [
-                    env_entry(key = "QNX_HOST", value = "/proc/self/cwd/" + ctx.file.qnx_host.path),
-                    env_entry(key = "QNX_TARGET", value = "/proc/self/cwd/" + ctx.file.qnx_target.path),
-                    env_entry(key = "QNX_CONFIGURATION_EXCLUSIVE", value = "/var/tmp/.qnx"),
-                    env_entry(key = "QNX_SHARED_LICENSE_FILE", value = "/opt/score_qnx/license/licenses"),
-                ],
+                env_entries = (
+                    [
+                        env_entry(key = "QNX_HOST", value = "/proc/self/cwd/" + ctx.file.qnx_host.path),
+                        env_entry(key = "QNX_TARGET", value = "/proc/self/cwd/" + ctx.file.qnx_target.path),
+                        env_entry(key = "QNX_CONFIGURATION_EXCLUSIVE", value = "/var/tmp/.qnx"),
+                        env_entry(key = "QNX_SHARED_LICENSE_FILE", value = "/opt/score_qnx/license/licenses"),
+                        # Only propagate license variables if the user provided them
+                        # (e.g. port@hostname for floating license server).
+                    ] +
+                    (
+                        [env_entry(key = "QNXLM_LICENSE_FILE", value = qnxlm_license_file)] if qnxlm_license_file else []
+                    ) +
+                    (
+                        [env_entry(key = "LM_LICENSE_FILE", value = lm_license_file or qnxlm_license_file)] if (lm_license_file or qnxlm_license_file) else []
+                    )
+                ),
             ),
         ],
     )
@@ -472,9 +489,13 @@ def _impl(ctx):
         for include_directory in ctx.files.cxx_builtin_include_directories
     ]
 
+    # Embed the SDP version in the toolchain identity so multiple QNX versions
+    # can coexist and be selected via platform constraints.
+    sdp_version = ctx.attr.sdp_version
+
     return cc_common.create_cc_toolchain_config_info(
         ctx = ctx,
-        abi_version = "%s-qnx8.0.0" % arch,
+        abi_version = "%s-qnx%s" % (arch, sdp_version),
         abi_libc_version = "unknown",
         compiler = "qcc",
         cxx_builtin_include_directories = cxx_builtin_include_directories,
@@ -484,7 +505,7 @@ def _impl(ctx):
         target_system_name = "%s-qnx" % arch,
         target_cpu = arch,
         target_libc = "unknown",
-        toolchain_identifier = "%s-qnx8.0.0" % arch,
+        toolchain_identifier = "%s-qnx%s" % (arch, sdp_version),
     )
 
 cc_toolchain_config = rule(
@@ -503,5 +524,7 @@ cc_toolchain_config = rule(
         "qcc_version": attr.string(default = "12.2.0"),
         "gcc_variant": attr.string(mandatory = True),
         "gcc_variant_cxx": attr.string(mandatory = True),
+        "sdp_version": attr.string(default = "8.0.0"),
+        "default_license_server": attr.string(default = ""),
     },
 )

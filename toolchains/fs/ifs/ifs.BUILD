@@ -19,6 +19,7 @@ qnx_fs_toolchain_config(
     target_dir = "@%{toolchain_sdp}//:target_dir",
     host = "@%{toolchain_sdp}//:host_all",
     target = "@%{toolchain_sdp}//:target_all",
+    default_license_server = "%{default_license_server}",
 )
 
 qnx_fs_toolchain_config(
@@ -28,6 +29,7 @@ qnx_fs_toolchain_config(
     target_dir = "@%{toolchain_sdp}//:aarch64_target_dir",
     host = "@%{toolchain_sdp}//:aarch64_host_all",
     target = "@%{toolchain_sdp}//:aarch64_target_all",
+    default_license_server = "%{default_license_server}",
 )
 
 toolchain(
@@ -39,6 +41,7 @@ toolchain(
     target_compatible_with = [
         "@platforms//cpu:x86_64",
         "@platforms//os:qnx",
+        "%{qnx_version_constraint}",
     ],
     toolchain = ":mkifs_toolchain",
     toolchain_type = "@score_toolchains_qnx//toolchains/fs/ifs:toolchain_type",
@@ -54,8 +57,8 @@ toolchain(
     target_compatible_with = [
         "@platforms//cpu:aarch64",
         "@platforms//os:qnx",
+        "%{qnx_version_constraint}",
     ],
     toolchain = ":mkifs_toolchain_aarch64",
     toolchain_type = "@score_toolchains_qnx//toolchains/fs/ifs:toolchain_type",
 )
-

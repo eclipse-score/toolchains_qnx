@@ -42,9 +42,11 @@ cc_toolchain_config(
 
   # arch-specific flags (only difference)
     arch = "x86_64",
-    qcc_version = "12.2.0",
+    qcc_version = "%{qcc_version}",
     gcc_variant = "gcc_ntox86_64",
     gcc_variant_cxx = "gcc_ntox86_64_cxx",
+    sdp_version = "%{sdp_version}",
+    default_license_server = "%{default_license_server}",
 
 )
 
@@ -70,6 +72,7 @@ toolchain(
     target_compatible_with = [
         "@platforms//cpu:x86_64",
         "@platforms//os:qnx",
+        "%{qnx_version_constraint}",
     ],
     toolchain = ":qcc_toolchain_x86_64",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
@@ -90,9 +93,11 @@ cc_toolchain_config(
     cxx_builtin_include_directories = "@%{toolchain_sdp}//:aarch64_cxx_builtin_include_directories",
     # only flags differ
     arch = "aarch64",
-    qcc_version = "12.2.0",
+    qcc_version = "%{qcc_version}",
     gcc_variant = "gcc_ntoaarch64le",
     gcc_variant_cxx = "gcc_ntoaarch64le_cxx",
+    sdp_version = "%{sdp_version}",
+    default_license_server = "%{default_license_server}",
   
 )
 
@@ -118,6 +123,7 @@ toolchain(
     target_compatible_with = [
         "@platforms//cpu:aarch64",
         "@platforms//os:qnx",
+        "%{qnx_version_constraint}",
     ],
     toolchain = ":qcc_toolchain",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",

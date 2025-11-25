@@ -20,16 +20,21 @@ ToolInfo = provider(
 )
 
 def _impl(ctx):
-    qnxlm_license_file = ctx.configuration.default_shell_env.get("QNXLM_LICENSE_FILE", "")
+    # Prefer user-provided license server, otherwise fall back to SDP default (if given).
+    qnxlm_license_file = ctx.configuration.default_shell_env.get("QNXLM_LICENSE_FILE", "") or ctx.attr.default_license_server
+    lm_license_file = ctx.configuration.default_shell_env.get("LM_LICENSE_FILE", "") or qnxlm_license_file
 
     env = {
         "QNX_HOST": "/proc/self/cwd/" + ctx.file.host_dir.path,
         "QNX_TARGET": "/proc/self/cwd/" + ctx.file.target_dir.path,
         "QNX_CONFIGURATION_EXCLUSIVE": "/var/tmp/.qnx",
         "QNX_SHARED_LICENSE_FILE": "/opt/score_qnx/license/licenses",
-        "QNXLM_LICENSE_FILE": qnxlm_license_file,
         "PATH": "/proc/self/cwd/" + ctx.file.host_dir.path + "/usr/bin",
     }
+    if qnxlm_license_file:
+        env["QNXLM_LICENSE_FILE"] = qnxlm_license_file
+    if lm_license_file:
+        env["LM_LICENSE_FILE"] = lm_license_file
 
     return [
         platform_common.ToolchainInfo(
@@ -67,5 +72,6 @@ qnx_fs_toolchain_config = rule(
             cfg = "exec",
             mandatory = True,
         ),
+        "default_license_server": attr.string(default = ""),
     },
 )

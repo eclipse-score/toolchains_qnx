@@ -1,6 +1,6 @@
 # Bazel toolchains for QNX
 
-This module implements support for [QNX SDP 8.0](https://www.qnx.com/products/everywhere/index.html)
+This module implements support for [QNX SDP 8.0](https://www.qnx.com/products/everywhere/index.html) and QNX SDP 7.1.
 
 ## Usage
 
@@ -12,6 +12,7 @@ toolchains_qnx = use_extension("@score_toolchains_qnx//:extensions.bzl", "toolch
 toolchains_qnx.sdp(
     url = "http://example.com/qnx800.tar.gz",
     sha256 = "<package sha256>",
+    version = "8.0.0",
 )
 
 use_repo(toolchains_qnx, "toolchains_qnx_sdp")
@@ -20,6 +21,8 @@ use_repo(toolchains_qnx, "toolchains_qnx_qcc")
 register_toolchains("@toolchains_qnx_qcc//:qcc_x86_64")
 register_toolchains("@toolchains_qnx_qcc//:qcc_aarch64")
 ```
+
+For QNX 7.1 archives (e.g. `deployed_qnx710.zip`), set `version = "7.1.0"` and `strip_prefix = "qnx710"` and use the `:x86_64-qnx7_1` / `:aarch64-qnx7_1` platforms.
 
 >NOTE: registering toolchains above may make your life harder if you will need to use multiple
 toolchains targeting same `arch` and `os` but with different SDP. In such case you may use
@@ -35,6 +38,14 @@ build:x86_64-qnx --sandbox_writable_path=/var/tmp
 build:aarch64-qnx8 --incompatible_strict_action_env
 build:aarch64-qnx8 --platforms=@score_toolchains_qnx//platforms:aarch64-qnx8_0
 build:aarch64-qnx8 --sandbox_writable_path=/var/tmp
+
+build:x86_64-qnx7 --incompatible_strict_action_env
+build:x86_64-qnx7 --platforms=@score_toolchains_qnx//platforms:x86_64-qnx7_1
+build:x86_64-qnx7 --sandbox_writable_path=/var/tmp
+
+build:aarch64-qnx7 --incompatible_strict_action_env
+build:aarch64-qnx7 --platforms=@score_toolchains_qnx//platforms:aarch64-qnx7_1
+build:aarch64-qnx7 --sandbox_writable_path=/var/tmp
 ```
 
 USER .bazelrc
