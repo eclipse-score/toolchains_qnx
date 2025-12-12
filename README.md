@@ -32,19 +32,19 @@ only for certain build config.
 .bazelrc
 ```
 build:x86_64-qnx --incompatible_strict_action_env
-build:x86_64-qnx --platforms=@score_toolchains_qnx//platforms:x86_64-qnx
+build:x86_64-qnx --platforms=@score_bazel_platforms//:x86_64-qnx
 build:x86_64-qnx --sandbox_writable_path=/var/tmp
 
 build:aarch64-qnx8 --incompatible_strict_action_env
-build:aarch64-qnx8 --platforms=@score_toolchains_qnx//platforms:aarch64-qnx8_0
+build:aarch64-qnx8 --platforms=@score_bazel_platforms//:arm64-qnx8_0
 build:aarch64-qnx8 --sandbox_writable_path=/var/tmp
 
 build:x86_64-qnx7 --incompatible_strict_action_env
-build:x86_64-qnx7 --platforms=@score_toolchains_qnx//platforms:x86_64-qnx7_1
+build:x86_64-qnx7 --platforms=@score_bazel_platforms//:x86_64-qnx7_1
 build:x86_64-qnx7 --sandbox_writable_path=/var/tmp
 
 build:aarch64-qnx7 --incompatible_strict_action_env
-build:aarch64-qnx7 --platforms=@score_toolchains_qnx//platforms:aarch64-qnx7_1
+build:aarch64-qnx7 --platforms=@score_bazel_platforms//:arm64-qnx7_1
 build:aarch64-qnx7 --sandbox_writable_path=/var/tmp
 ```
 

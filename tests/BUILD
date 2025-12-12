@@ -19,14 +19,16 @@ config_setting(
     constraint_values = [
         "@platforms//cpu:x86_64",
         "@platforms//os:qnx",
+        "@score_bazel_platforms//:qnx8_0",
     ],
 )
 
 config_setting(
     name = "is_qnx_aarch64",
     constraint_values = [
-        "@platforms//cpu:aarch64",
+        "@platforms//cpu:arm64",
         "@platforms//os:qnx",
+        "@score_bazel_platforms//:qnx8_0",
     ],
 )
 

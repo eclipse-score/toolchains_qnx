@@ -18,14 +18,14 @@ def _version_info(version):
         return struct(
             build_file = "@score_toolchains_qnx//toolchains:sdp_qnx710.BUILD",
             default_qcc_version = "8.3.0",
-            qnx_version_constraint = "@score_toolchains_qnx//platforms:qnx7_1",
+            qnx_version_constraint = "@score_bazel_platforms//:qnx7_1",
             default_license_server = "27000@10.56.17.4",
         )
     if version.startswith("8"):
         return struct(
             build_file = "@score_toolchains_qnx//toolchains:sdp.BUILD",
             default_qcc_version = "12.2.0",
-            qnx_version_constraint = "@score_toolchains_qnx//platforms:qnx8_0",
+            qnx_version_constraint = "@score_bazel_platforms//:qnx8_0",
             default_license_server = "",
         )
 

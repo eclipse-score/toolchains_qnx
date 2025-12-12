@@ -36,7 +36,7 @@ qcc_toolchain = repository_rule(
         "qcc_version": attr.string(default = "12.2.0"),
         "sdp_version": attr.string(default = "8.0.0"),
         "qnx_version_constraint": attr.label(
-            default = "//platforms:qnx8_0",
+            default = "@score_bazel_platforms//:qnx8_0",
         ),
         "default_license_server": attr.string(default = ""),
         "_cc_toolchain_config_bzl": attr.label(
@@ -64,7 +64,7 @@ ifs_toolchain = repository_rule(
     attrs = {
         "sdp_repo": attr.string(),
         "qnx_version_constraint": attr.label(
-            default = "//platforms:qnx8_0",
+            default = "@score_bazel_platforms//:qnx8_0",
         ),
         "default_license_server": attr.string(default = ""),
         "_ifs_tolchain_build": attr.label(

@@ -2,10 +2,10 @@ common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry
 common --registry=https://bcr.bazel.build
 
 build:x86_64-qnx --incompatible_strict_action_env
-build:x86_64-qnx --platforms=@score_toolchains_qnx//platforms:x86_64-qnx
+build:x86_64-qnx --platforms=@score_bazel_platforms//:x86_64-qnx8_0
 build:x86_64-qnx --sandbox_writable_path=/var/tmp
 
 
 build:aarch64-qnx --incompatible_strict_action_env
-build:aarch64-qnx --platforms=@score_toolchains_qnx//platforms:aarch64-qnx8_0
+build:aarch64-qnx --platforms=@score_bazel_platforms//:arm64-qnx8_0
 build:aarch64-qnx --sandbox_writable_path=/var/tmp

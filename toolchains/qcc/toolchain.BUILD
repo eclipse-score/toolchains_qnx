@@ -121,7 +121,7 @@ toolchain(
         "@platforms//os:linux",
     ],
     target_compatible_with = [
-        "@platforms//cpu:aarch64",
+        "@platforms//cpu:arm64",
         "@platforms//os:qnx",
         "%{qnx_version_constraint}",
     ],
