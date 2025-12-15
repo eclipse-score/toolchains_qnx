@@ -47,6 +47,10 @@ jobs:
           SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
           SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
         run: |
+          echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          echo '{"uri":"https://www.qnx.com/download/download/79858/installation.tgz"}' | ./tools/qnx_credential_helper.py
+          echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          
           bazel build //... --config=x86_64-qnx \
             --credential_helper=*.qnx.com=${{ github.workspace }}/tools/qnx_credential_helper.py
       - name: Smoke boot (x86_64)
