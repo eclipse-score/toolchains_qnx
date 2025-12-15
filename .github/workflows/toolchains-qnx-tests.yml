@@ -47,9 +47,16 @@ jobs:
           SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
           SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
         run: |
-          echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-          echo '{"uri":"https://www.qnx.com/download/download/79858/installation.tgz"}' | ./tools/qnx_credential_helper.py
-          echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          printf 'DO WE HAVE SECRETS ?! %s' "${SCORE_QNX_PASSWORD:-}" | wc -c
+          for i in {1..20}; do
+            echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            echo '{"uri":"https://www.qnx.com/download/download/79858/installation.tgz"}' | \
+              "${GITHUB_WORKSPACE}/tools/qnx_credential_helper.py"
+            echo "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            sleep 2
+          done
+
+          sleep 1
           
           bazel build //... --config=x86_64-qnx \
             --credential_helper=*.qnx.com=${{ github.workspace }}/tools/qnx_credential_helper.py
