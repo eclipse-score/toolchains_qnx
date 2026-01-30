@@ -28,7 +28,7 @@ jobs:
         uses: bazel-contrib/setup-bazel@0.14.0
       - name: Setup QNX License
         env:
-          SCORE_QNX_LICENSE: ${{ secrets.SCORE_QNX_LICENSE }}
+          SCORE_QNX_LICENSE: ${{ secrets.USER_QNX_LICENSE }}
         run: |
           mkdir -p /opt/score_qnx/license
           echo "${SCORE_QNX_LICENSE}" | base64 --decode > /opt/score_qnx/license/licenses
@@ -44,8 +44,8 @@ jobs:
       # ---------- x86_64 ----------
       - name: Build (x86_64)
         env:
-          SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
-          SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
+          SCORE_QNX_USER: ${{ secrets.USER_QNX_USER }}
+          SCORE_QNX_PASSWORD: ${{ secrets.USER_QNX_PASSWORD }}
         run: |
           bazel build //... --config=x86_64-qnx \
             --credential_helper=*.qnx.com=${{ github.workspace }}/tools/qnx_credential_helper.py
@@ -55,8 +55,8 @@ jobs:
       # ---------- aarch64 ----------
       - name: Build (aarch64)
         env:
-          SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
-          SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
+          SCORE_QNX_USER: ${{ secrets.USER_QNX_USER }}
+          SCORE_QNX_PASSWORD: ${{ secrets.USER_QNX_PASSWORD }}
         run: |
           bazel build //... --config=aarch64-qnx \
             --credential_helper=*.qnx.com=${{ github.workspace }}/tools/qnx_credential_helper.py
