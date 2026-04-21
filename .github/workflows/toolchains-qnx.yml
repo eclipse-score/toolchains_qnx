@@ -26,10 +26,10 @@ jobs:
         uses: bazel-contrib/setup-bazel@0.14.0
       - name: Run build
         run: |
-          bazel build //...
+          bazel build --lockfile_mode=error //...
       - name: Run copyright check
         run: |
-          bazel run //:copyright.check
+          bazel run --lockfile_mode=error //:copyright.check
       - name: Run formatting check
         run: |
-          bazel test //:format.check
+          bazel test --lockfile_mode=error //:format.check
