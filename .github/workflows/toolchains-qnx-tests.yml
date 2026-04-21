@@ -47,22 +47,22 @@ jobs:
           SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
           SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
         run: |
-          bazel build //... --config=x86_64-qnx \
+          bazel build --lockfile_mode=error //... --config=x86_64-qnx \
             --credential_helper=*.qnx.com=${{ github.workspace }}/tools/qnx_credential_helper.py
       - name: Smoke boot (x86_64)
         run: |
-          bazel run --config=x86_64-qnx //:run_qemu
+          bazel run --lockfile_mode=error --config=x86_64-qnx //:run_qemu
       # ---------- aarch64 ----------
       - name: Build (aarch64)
         env:
           SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
           SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
         run: |
-          bazel build //... --config=aarch64-qnx \
+          bazel build --lockfile_mode=error //... --config=aarch64-qnx \
             --credential_helper=*.qnx.com=${{ github.workspace }}/tools/qnx_credential_helper.py
       - name: Smoke boot (aarch64)
         run: |
-          bazel run --config=aarch64-qnx //:run_qemu
+          bazel run --lockfile_mode=error --config=aarch64-qnx //:run_qemu
       - name: Cleanup QNX License
         if: always()
         run: |
