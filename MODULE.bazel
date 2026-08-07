@@ -10,11 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(
-    name = "score_toolchains_qnx",
-    version = "0.0.6",
-    compatibility_level = 0,
-)
+module(name = "score_toolchains_qnx")
 
 bazel_dep(name = "aspect_rules_lint", version = "1.0.3")
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
